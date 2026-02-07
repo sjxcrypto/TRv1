@@ -1,0 +1,51 @@
+[package]
+name = "trv1-bench"
+description = "Performance benchmarks for TRv1 consensus, fee market, caching, staking, and rent"
+version = { workspace = true }
+authors = { workspace = true }
+repository = { workspace = true }
+homepage = { workspace = true }
+license = { workspace = true }
+edition = { workspace = true }
+publish = false
+
+[dependencies]
+# TRv1 crates
+trv1-consensus-bft = { path = "../../consensus-bft" }
+trv1-fee-market = { path = "../../fee-market" }
+
+# Solana primitives
+solana-hash = { workspace = true }
+solana-keypair = { workspace = true }
+solana-pubkey = { workspace = true }
+solana-sha256-hasher = { workspace = true }
+solana-signature = { workspace = true }
+solana-signer = { workspace = true }
+
+# Benchmarking
+criterion = { workspace = true, features = ["html_reports"] }
+rand = { workspace = true }
+
+[lib]
+name = "trv1_bench"
+path = "src/lib.rs"
+
+[[bench]]
+name = "consensus_bench"
+harness = false
+
+[[bench]]
+name = "fee_market_bench"
+harness = false
+
+[[bench]]
+name = "cache_bench"
+harness = false
+
+[[bench]]
+name = "staking_bench"
+harness = false
+
+[[bench]]
+name = "rent_bench"
+harness = false

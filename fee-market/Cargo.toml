@@ -1,0 +1,17 @@
+[package]
+name = "trv1-fee-market"
+description = "TRv1 EIP-1559 dynamic fee market"
+version = { workspace = true }
+authors = { workspace = true }
+repository = { workspace = true }
+homepage = { workspace = true }
+license = { workspace = true }
+edition = "2021"
+
+[dependencies]
+borsh = { workspace = true }
+serde = { workspace = true }
+thiserror = { workspace = true }
+
+[dev-dependencies]
+serde_json = { workspace = true }

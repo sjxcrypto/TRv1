@@ -1,0 +1,35 @@
+[package]
+name = "trv1-consensus-net"
+description = "TRv1 consensus networking layer for BFT message propagation"
+documentation = "https://docs.rs/trv1-consensus-net"
+version = { workspace = true }
+authors = { workspace = true }
+repository = { workspace = true }
+homepage = { workspace = true }
+license = { workspace = true }
+edition = { workspace = true }
+
+[features]
+agave-unstable-api = []
+dev-context-only-utils = []
+
+[dependencies]
+agave-votor-messages = { workspace = true }
+bincode = { workspace = true }
+crossbeam-channel = { workspace = true }
+dashmap = { workspace = true }
+log = { workspace = true }
+serde = { workspace = true }
+solana-clock = { workspace = true }
+solana-hash = { workspace = true, features = ["serde"] }
+solana-merkle-tree = { workspace = true }
+solana-metrics = { workspace = true }
+solana-pubkey = { workspace = true, features = ["serde"] }
+thiserror = { workspace = true }
+tokio = { workspace = true, features = ["full"] }
+
+[dev-dependencies]
+tempfile = { workspace = true }
+
+[lints]
+workspace = true

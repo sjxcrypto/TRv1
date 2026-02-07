@@ -1,0 +1,153 @@
+# ──────────────────────────────────────────────────────────────────────────────
+# TRv1 Local Testnet — 3-Validator Docker Compose
+#
+# Spins up a fully functional 3-node TRv1 testnet:
+#   - validator-1: Bootstrap leader + RPC at port 8899
+#   - validator-2: Follower + RPC at port 8999
+#   - validator-3: Follower + RPC at port 9099
+#   - faucet:      Accessible on validator-1 at port 9900
+#
+# Usage:
+#   cd docker/
+#   docker compose up --build         # Start (builds images first)
+#   docker compose up -d              # Start in background
+#   docker compose logs -f            # Follow logs
+#   docker compose down               # Stop and remove containers
+#   docker compose down -v            # Stop and remove containers + volumes
+#
+# Test RPC:
+#   curl http://localhost:8899 -X POST -H "Content-Type: application/json" \
+#     -d '{"jsonrpc":"2.0","id":1,"method":"getHealth"}'
+# ──────────────────────────────────────────────────────────────────────────────
+
+x-common-env: &common-env
+  TRV1_SLOTS_PER_EPOCH: "86400"
+  TRV1_INFLATION: "0.05"
+  RUST_LOG: "info"
+  RUST_BACKTRACE: "1"
+
+x-validator-base: &validator-base
+  build:
+    context: ..
+    dockerfile: docker/Dockerfile
+  restart: unless-stopped
+  networks:
+    - trv1-testnet
+
+services:
+  # ═════════════════════════════════════════════════════════════════════════════
+  # Validator 1 — Bootstrap Leader
+  # ═════════════════════════════════════════════════════════════════════════════
+  validator-1:
+    <<: *validator-base
+    container_name: trv1-validator-1
+    hostname: validator-1
+    environment:
+      <<: *common-env
+      TRV1_MODE: "test-validator"
+      TRV1_RPC_PORT: "8899"
+      TRV1_GOSSIP_PORT: "8001"
+      TRV1_FAUCET_PORT: "9900"
+    ports:
+      - "8899:8899"   # JSON-RPC
+      - "8900:8900"   # WebSocket
+      - "9900:9900"   # Faucet
+      - "8001:8001"   # Gossip
+    volumes:
+      - validator-1-ledger:/data/ledger
+      - validator-1-accounts:/data/accounts
+      - validator-1-snapshots:/data/snapshots
+      - validator-1-keys:/data/keys
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:8899/health"]
+      interval: 15s
+      timeout: 5s
+      start_period: 60s
+      retries: 5
+
+  # ═════════════════════════════════════════════════════════════════════════════
+  # Validator 2 — Follower
+  # ═════════════════════════════════════════════════════════════════════════════
+  validator-2:
+    <<: *validator-base
+    container_name: trv1-validator-2
+    hostname: validator-2
+    depends_on:
+      validator-1:
+        condition: service_healthy
+    environment:
+      <<: *common-env
+      TRV1_MODE: "validator"
+      TRV1_RPC_PORT: "8899"
+      TRV1_GOSSIP_PORT: "8001"
+      TRV1_ENTRYPOINT: "validator-1:8001"
+    ports:
+      - "8999:8899"   # JSON-RPC (mapped to host 8999)
+    volumes:
+      - validator-2-ledger:/data/ledger
+      - validator-2-accounts:/data/accounts
+      - validator-2-snapshots:/data/snapshots
+      - validator-2-keys:/data/keys
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:8899/health"]
+      interval: 15s
+      timeout: 5s
+      start_period: 90s
+      retries: 5
+
+  # ═════════════════════════════════════════════════════════════════════════════
+  # Validator 3 — Follower
+  # ═════════════════════════════════════════════════════════════════════════════
+  validator-3:
+    <<: *validator-base
+    container_name: trv1-validator-3
+    hostname: validator-3
+    depends_on:
+      validator-1:
+        condition: service_healthy
+    environment:
+      <<: *common-env
+      TRV1_MODE: "validator"
+      TRV1_RPC_PORT: "8899"
+      TRV1_GOSSIP_PORT: "8001"
+      TRV1_ENTRYPOINT: "validator-1:8001"
+    ports:
+      - "9099:8899"   # JSON-RPC (mapped to host 9099)
+    volumes:
+      - validator-3-ledger:/data/ledger
+      - validator-3-accounts:/data/accounts
+      - validator-3-snapshots:/data/snapshots
+      - validator-3-keys:/data/keys
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:8899/health"]
+      interval: 15s
+      timeout: 5s
+      start_period: 90s
+      retries: 5
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Volumes
+# ═══════════════════════════════════════════════════════════════════════════════
+volumes:
+  validator-1-ledger:
+  validator-1-accounts:
+  validator-1-snapshots:
+  validator-1-keys:
+  validator-2-ledger:
+  validator-2-accounts:
+  validator-2-snapshots:
+  validator-2-keys:
+  validator-3-ledger:
+  validator-3-accounts:
+  validator-3-snapshots:
+  validator-3-keys:
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Networks
+# ═══════════════════════════════════════════════════════════════════════════════
+networks:
+  trv1-testnet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16

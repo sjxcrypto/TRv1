@@ -1,0 +1,27 @@
+[package]
+name = "trv1-consensus-bft"
+description = "Tendermint-style BFT consensus engine for TRv1"
+version = { workspace = true }
+authors = { workspace = true }
+repository = { workspace = true }
+edition = { workspace = true }
+license = { workspace = true }
+
+[dependencies]
+log = { workspace = true }
+solana-hash = { workspace = true }
+solana-sha256-hasher = { workspace = true }
+solana-keypair = { workspace = true }
+solana-pubkey = { workspace = true }
+solana-signature = { workspace = true }
+solana-signer = { workspace = true }
+solana-transaction = { workspace = true }
+thiserror = { workspace = true }
+
+[dev-dependencies]
+
+[features]
+default = []
+
+[lib]
+name = "trv1_consensus_bft"
