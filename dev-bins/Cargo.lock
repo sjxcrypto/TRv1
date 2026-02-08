@@ -125,89 +125,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "agave-ledger-tool"
-version = "4.0.0-alpha.0"
-dependencies = [
- "agave-feature-set",
- "agave-logger",
- "agave-reserved-account-keys",
- "agave-snapshots",
- "agave-syscalls",
- "assert_cmd",
- "bs58",
- "chrono",
- "clap 2.34.0",
- "crossbeam-channel",
- "csv",
- "dashmap",
- "futures 0.3.31",
- "histogram",
- "itertools 0.14.0",
- "log",
- "num_cpus",
- "pretty-hex",
- "rayon",
- "regex",
- "serde",
- "serde_bytes",
- "serde_json",
- "signal-hook",
- "solana-account",
- "solana-account-decoder",
- "solana-accounts-db",
- "solana-bpf-loader-program",
- "solana-clap-utils",
- "solana-cli-output",
- "solana-clock",
- "solana-cluster-type",
- "solana-compute-budget",
- "solana-core",
- "solana-cost-model",
- "solana-entry",
- "solana-feature-gate-interface",
- "solana-genesis-config",
- "solana-genesis-utils",
- "solana-geyser-plugin-manager",
- "solana-gossip",
- "solana-hash 4.0.1",
- "solana-inflation",
- "solana-instruction",
- "solana-keypair",
- "solana-ledger",
- "solana-loader-v3-interface",
- "solana-measure",
- "solana-message",
- "solana-native-token",
- "solana-program-runtime",
- "solana-pubkey 4.0.0",
- "solana-rent 3.0.0",
- "solana-rpc",
- "solana-runtime",
- "solana-runtime-transaction",
- "solana-sbpf",
- "solana-sdk-ids",
- "solana-shred-version",
- "solana-signature",
- "solana-stake-interface",
- "solana-storage-bigtable",
- "solana-svm-callback",
- "solana-svm-feature-set",
- "solana-svm-log-collector",
- "solana-svm-type-overrides",
- "solana-system-interface 3.0.0",
- "solana-transaction",
- "solana-transaction-context",
- "solana-transaction-status",
- "solana-unified-scheduler-pool",
- "solana-version",
- "solana-vote",
- "solana-vote-program",
- "thiserror 2.0.18",
- "tikv-jemallocator",
- "tokio",
-]
-
-[[package]]
 name = "agave-logger"
 version = "4.0.0-alpha.0"
 dependencies = [
@@ -224,7 +141,7 @@ dependencies = [
  "agave-feature-set",
  "bincode",
  "digest 0.10.7",
- "ed25519-dalek 1.0.1",
+ "ed25519-dalek",
  "libsecp256k1",
  "openssl",
  "sha3",
@@ -1894,19 +1811,6 @@ dependencies = [
 
 [[package]]
 name = "curve25519-dalek"
-version = "3.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0b9fdf9972b2bd6af2d913799d9ebc165ea4d2e65878e329d9c6b372c4491b61"
-dependencies = [
- "byteorder",
- "digest 0.9.0",
- "rand_core 0.5.1",
- "subtle",
- "zeroize",
-]
-
-[[package]]
-name = "curve25519-dalek"
 version = "4.1.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "97fb8b7c4503de7d6ae7b42ab72a5a59857b4c937ec27a3d4539dba95b5ab2be"
@@ -2224,17 +2128,8 @@ dependencies = [
  "digest 0.10.7",
  "elliptic-curve",
  "rfc6979",
- "signature 2.2.0",
+ "signature",
  "spki",
-]
-
-[[package]]
-name = "ed25519"
-version = "1.5.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "91cff35c70bba8a626e3185d8cd48cc11b5437e1a5bcd15b9b5fa3c64b6dfee7"
-dependencies = [
- "signature 1.6.4",
 ]
 
 [[package]]
@@ -2244,21 +2139,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "115531babc129696a58c64a4fef0a8bf9e9698629fb97e9e40767d235cfbcd53"
 dependencies = [
  "pkcs8",
- "signature 2.2.0",
-]
-
-[[package]]
-name = "ed25519-dalek"
-version = "1.0.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c762bae6dcaf24c4c84667b8579785430908723d5c889f469d76a41d59cc7a9d"
-dependencies = [
- "curve25519-dalek 3.2.0",
- "ed25519 1.5.3",
- "rand 0.7.3",
- "serde",
- "sha2 0.9.9",
- "zeroize",
+ "signature",
 ]
 
 [[package]]
@@ -2267,8 +2148,8 @@ version = "2.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "70e796c081cee67dc755e1a36a0a172b897fab85fc3f6bc48307991f64e4eca9"
 dependencies = [
- "curve25519-dalek 4.1.3",
- "ed25519 2.2.3",
+ "curve25519-dalek",
+ "ed25519",
  "rand_core 0.6.4",
  "serde",
  "sha2 0.10.9",
@@ -2283,7 +2164,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6b49a684b133c4980d7ee783936af771516011c8cd15f429dbda77245e282f03"
 dependencies = [
  "derivation-path",
- "ed25519-dalek 2.2.0",
+ "ed25519-dalek",
  "hmac 0.12.1",
  "sha2 0.10.9",
 ]
@@ -3766,7 +3647,7 @@ dependencies = [
  "elliptic-curve",
  "once_cell",
  "sha2 0.10.9",
- "signature 2.2.0",
+ "signature",
 ]
 
 [[package]]
@@ -5924,12 +5805,6 @@ dependencies = [
 
 [[package]]
 name = "signature"
-version = "1.6.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "74233d3b3b2f6d4b006dc19dee745e73e2a6bfb6f93607cd3b02bd5b00797d7c"
-
-[[package]]
-name = "signature"
 version = "2.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "77549399552de45a898a580c1b41d445bf730df867cc44e6c0233bbc4b8329de"
@@ -6202,7 +6077,7 @@ dependencies = [
  "borsh",
  "bytemuck",
  "bytemuck_derive",
- "curve25519-dalek 4.1.3",
+ "curve25519-dalek",
  "five8",
  "five8_const",
  "rand 0.9.2",
@@ -6382,7 +6257,6 @@ dependencies = [
  "solana-core",
  "solana-faucet",
  "solana-fee-calculator",
- "solana-genesis",
  "solana-genesis-config",
  "solana-gossip",
  "solana-hash 4.0.1",
@@ -6408,7 +6282,6 @@ dependencies = [
  "solana-signer",
  "solana-streamer",
  "solana-system-interface 3.0.0",
- "solana-test-validator",
  "solana-time-utils",
  "solana-tps-client",
  "solana-tpu-client",
@@ -6419,6 +6292,8 @@ dependencies = [
  "tempfile",
  "thiserror 2.0.18",
  "tikv-jemallocator",
+ "trv1-genesis",
+ "trv1-test-validator",
 ]
 
 [[package]]
@@ -6568,13 +6443,16 @@ dependencies = [
  "solana-compute-budget-program",
  "solana-hash 4.0.1",
  "solana-loader-v4-program",
+ "solana-passive-stake-program",
  "solana-program-runtime",
  "solana-pubkey 4.0.0",
  "solana-sdk-ids",
  "solana-system-program",
+ "solana-treasury-program",
  "solana-vote-program",
  "solana-zk-elgamal-proof-program",
  "solana-zk-token-proof-program",
+ "trv1-developer-rewards-program",
 ]
 
 [[package]]
@@ -7050,7 +6928,7 @@ checksum = "eae4261b9a8613d10e77ac831a8fa60b6fa52b9b103df46d641deff9f9812a23"
 dependencies = [
  "bytemuck",
  "bytemuck_derive",
- "curve25519-dalek 4.1.3",
+ "curve25519-dalek",
  "solana-define-syscall 2.3.0",
  "subtle",
  "thiserror 2.0.18",
@@ -7064,7 +6942,7 @@ checksum = "c0ee66a3e25ed8d20ed6fcd1ac71735415ff1edaf33ff1ec2118826eba927bcc"
 dependencies = [
  "bytemuck",
  "bytemuck_derive",
- "curve25519-dalek 4.1.3",
+ "curve25519-dalek",
  "solana-define-syscall 5.0.0",
  "subtle",
  "thiserror 2.0.18",
@@ -7344,53 +7222,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "solana-genesis"
-version = "4.0.0-alpha.0"
-dependencies = [
- "agave-feature-set",
- "agave-logger",
- "agave-snapshots",
- "base64 0.22.1",
- "bincode",
- "clap 2.34.0",
- "itertools 0.14.0",
- "serde",
- "serde_json",
- "serde_yaml",
- "solana-account",
- "solana-bls-signatures",
- "solana-clap-utils",
- "solana-cli-config",
- "solana-clock",
- "solana-cluster-type",
- "solana-commitment-config",
- "solana-entry",
- "solana-epoch-schedule",
- "solana-feature-gate-interface",
- "solana-fee-calculator",
- "solana-genesis-config",
- "solana-genesis-utils",
- "solana-inflation",
- "solana-keypair",
- "solana-ledger",
- "solana-loader-v3-interface",
- "solana-native-token",
- "solana-poh-config",
- "solana-pubkey 4.0.0",
- "solana-rent 3.0.0",
- "solana-rpc-client",
- "solana-rpc-client-api",
- "solana-runtime",
- "solana-sdk-ids",
- "solana-signer",
- "solana-stake-interface",
- "solana-time-utils",
- "solana-version",
- "solana-vote-program",
- "tempfile",
-]
-
-[[package]]
 name = "solana-genesis-config"
 version = "3.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -7631,7 +7462,7 @@ version = "3.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5ac8be597c9e231b0cab2928ce3bc3e4ee77d9c0ad92977b9d901f3879f25a7a"
 dependencies = [
- "ed25519-dalek 2.2.0",
+ "ed25519-dalek",
  "ed25519-dalek-bip32",
  "five8",
  "rand 0.8.5",
@@ -8069,6 +7900,32 @@ dependencies = [
 ]
 
 [[package]]
+name = "solana-passive-stake-program"
+version = "4.0.0-alpha.0"
+dependencies = [
+ "bincode",
+ "borsh",
+ "log",
+ "num-derive",
+ "num-traits",
+ "serde",
+ "solana-account",
+ "solana-bincode",
+ "solana-clock",
+ "solana-epoch-schedule",
+ "solana-instruction",
+ "solana-packet 4.0.0",
+ "solana-program-runtime",
+ "solana-pubkey 4.0.0",
+ "solana-rent 3.0.0",
+ "solana-sdk-ids",
+ "solana-svm-log-collector",
+ "solana-svm-type-overrides",
+ "solana-transaction-context",
+ "thiserror 2.0.18",
+]
+
+[[package]]
 name = "solana-perf"
 version = "4.0.0-alpha.0"
 dependencies = [
@@ -8077,7 +7934,7 @@ dependencies = [
  "bv",
  "bytes",
  "caps",
- "curve25519-dalek 4.1.3",
+ "curve25519-dalek",
  "dlopen2",
  "fnv",
  "libc",
@@ -8790,6 +8647,7 @@ dependencies = [
  "symlink",
  "tempfile",
  "thiserror 2.0.18",
+ "trv1-fee-market",
 ]
 
 [[package]]
@@ -9005,7 +8863,7 @@ version = "3.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f4028aeedd443d80f1dccbf64872593a80e6a9676ee9007f6eccb63b65983ebd"
 dependencies = [
- "ed25519-dalek 2.2.0",
+ "ed25519-dalek",
  "five8",
  "rand 0.9.2",
  "serde",
@@ -9406,59 +9264,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "solana-test-validator"
-version = "4.0.0-alpha.0"
-dependencies = [
- "agave-feature-set",
- "agave-snapshots",
- "agave-syscalls",
- "base64 0.22.1",
- "bincode",
- "crossbeam-channel",
- "log",
- "serde_json",
- "solana-account",
- "solana-accounts-db",
- "solana-cli-output",
- "solana-clock",
- "solana-cluster-type",
- "solana-commitment-config",
- "solana-compute-budget",
- "solana-core",
- "solana-epoch-schedule",
- "solana-feature-gate-interface",
- "solana-fee-calculator",
- "solana-genesis-utils",
- "solana-geyser-plugin-manager",
- "solana-gossip",
- "solana-inflation",
- "solana-instruction",
- "solana-keypair",
- "solana-ledger",
- "solana-loader-v3-interface",
- "solana-message",
- "solana-native-token",
- "solana-net-utils",
- "solana-program-binaries",
- "solana-program-runtime",
- "solana-program-test",
- "solana-pubkey 4.0.0",
- "solana-rent 3.0.0",
- "solana-rpc",
- "solana-rpc-client",
- "solana-rpc-client-api",
- "solana-runtime",
- "solana-sbpf",
- "solana-sdk-ids",
- "solana-signer",
- "solana-streamer",
- "solana-tpu-client",
- "solana-transaction",
- "solana-validator-exit",
- "tokio",
-]
-
-[[package]]
 name = "solana-time-utils"
 version = "3.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -9688,6 +9493,30 @@ dependencies = [
  "solana-transaction",
  "solana-transaction-context",
  "solana-transaction-error",
+ "thiserror 2.0.18",
+]
+
+[[package]]
+name = "solana-treasury-program"
+version = "4.0.0-alpha.0"
+dependencies = [
+ "bincode",
+ "borsh",
+ "log",
+ "num-derive",
+ "num-traits",
+ "serde",
+ "solana-account",
+ "solana-bincode",
+ "solana-clock",
+ "solana-instruction",
+ "solana-packet 4.0.0",
+ "solana-program-runtime",
+ "solana-pubkey 4.0.0",
+ "solana-sdk-ids",
+ "solana-svm-log-collector",
+ "solana-svm-type-overrides",
+ "solana-transaction-context",
  "thiserror 2.0.18",
 ]
 
@@ -9961,7 +9790,7 @@ dependencies = [
  "bincode",
  "bytemuck",
  "bytemuck_derive",
- "curve25519-dalek 4.1.3",
+ "curve25519-dalek",
  "getrandom 0.2.16",
  "itertools 0.12.1",
  "js-sys",
@@ -9998,7 +9827,7 @@ dependencies = [
  "bincode",
  "bytemuck",
  "bytemuck_derive",
- "curve25519-dalek 4.1.3",
+ "curve25519-dalek",
  "itertools 0.14.0",
  "merlin",
  "num-derive",
@@ -10196,7 +10025,7 @@ version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f63a2b41095945dc15274b924b21ccae9b3ec9dc2fdd43dbc08de8c33bbcd915"
 dependencies = [
- "curve25519-dalek 4.1.3",
+ "curve25519-dalek",
  "solana-zk-sdk 4.0.0",
  "thiserror 2.0.18",
 ]
@@ -11069,6 +10898,224 @@ dependencies = [
  "rusb",
  "thiserror 2.0.18",
  "tracing",
+]
+
+[[package]]
+name = "trv1-developer-rewards-program"
+version = "4.0.0-alpha.0"
+dependencies = [
+ "bincode",
+ "borsh",
+ "log",
+ "num-derive",
+ "num-traits",
+ "serde",
+ "solana-account",
+ "solana-bincode",
+ "solana-clock",
+ "solana-instruction",
+ "solana-native-token",
+ "solana-packet 4.0.0",
+ "solana-program-error",
+ "solana-program-runtime",
+ "solana-pubkey 4.0.0",
+ "solana-sdk-ids",
+ "solana-svm-log-collector",
+ "solana-svm-type-overrides",
+ "solana-transaction-context",
+ "thiserror 2.0.18",
+]
+
+[[package]]
+name = "trv1-fee-market"
+version = "4.0.0-alpha.0"
+dependencies = [
+ "borsh",
+ "serde",
+ "thiserror 2.0.18",
+]
+
+[[package]]
+name = "trv1-genesis"
+version = "4.0.0-alpha.0"
+dependencies = [
+ "agave-feature-set",
+ "agave-logger",
+ "agave-snapshots",
+ "base64 0.22.1",
+ "bincode",
+ "clap 2.34.0",
+ "itertools 0.14.0",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "solana-account",
+ "solana-bls-signatures",
+ "solana-clap-utils",
+ "solana-cli-config",
+ "solana-clock",
+ "solana-cluster-type",
+ "solana-commitment-config",
+ "solana-entry",
+ "solana-epoch-schedule",
+ "solana-feature-gate-interface",
+ "solana-fee-calculator",
+ "solana-genesis-config",
+ "solana-genesis-utils",
+ "solana-inflation",
+ "solana-keypair",
+ "solana-ledger",
+ "solana-loader-v3-interface",
+ "solana-native-token",
+ "solana-poh-config",
+ "solana-pubkey 4.0.0",
+ "solana-rent 3.0.0",
+ "solana-rpc-client",
+ "solana-rpc-client-api",
+ "solana-runtime",
+ "solana-sdk-ids",
+ "solana-signer",
+ "solana-stake-interface",
+ "solana-time-utils",
+ "solana-version",
+ "solana-vote-program",
+ "tempfile",
+]
+
+[[package]]
+name = "trv1-ledger-tool"
+version = "4.0.0-alpha.0"
+dependencies = [
+ "agave-feature-set",
+ "agave-logger",
+ "agave-reserved-account-keys",
+ "agave-snapshots",
+ "agave-syscalls",
+ "assert_cmd",
+ "bs58",
+ "chrono",
+ "clap 2.34.0",
+ "crossbeam-channel",
+ "csv",
+ "dashmap",
+ "futures 0.3.31",
+ "histogram",
+ "itertools 0.14.0",
+ "log",
+ "num_cpus",
+ "pretty-hex",
+ "rayon",
+ "regex",
+ "serde",
+ "serde_bytes",
+ "serde_json",
+ "signal-hook",
+ "solana-account",
+ "solana-account-decoder",
+ "solana-accounts-db",
+ "solana-bpf-loader-program",
+ "solana-clap-utils",
+ "solana-cli-output",
+ "solana-clock",
+ "solana-cluster-type",
+ "solana-compute-budget",
+ "solana-core",
+ "solana-cost-model",
+ "solana-entry",
+ "solana-feature-gate-interface",
+ "solana-genesis-config",
+ "solana-genesis-utils",
+ "solana-geyser-plugin-manager",
+ "solana-gossip",
+ "solana-hash 4.0.1",
+ "solana-inflation",
+ "solana-instruction",
+ "solana-keypair",
+ "solana-ledger",
+ "solana-loader-v3-interface",
+ "solana-measure",
+ "solana-message",
+ "solana-native-token",
+ "solana-program-runtime",
+ "solana-pubkey 4.0.0",
+ "solana-rent 3.0.0",
+ "solana-rpc",
+ "solana-runtime",
+ "solana-runtime-transaction",
+ "solana-sbpf",
+ "solana-sdk-ids",
+ "solana-shred-version",
+ "solana-signature",
+ "solana-stake-interface",
+ "solana-storage-bigtable",
+ "solana-svm-callback",
+ "solana-svm-feature-set",
+ "solana-svm-log-collector",
+ "solana-svm-type-overrides",
+ "solana-system-interface 3.0.0",
+ "solana-transaction",
+ "solana-transaction-context",
+ "solana-transaction-status",
+ "solana-unified-scheduler-pool",
+ "solana-version",
+ "solana-vote",
+ "solana-vote-program",
+ "thiserror 2.0.18",
+ "tikv-jemallocator",
+ "tokio",
+]
+
+[[package]]
+name = "trv1-test-validator"
+version = "4.0.0-alpha.0"
+dependencies = [
+ "agave-feature-set",
+ "agave-snapshots",
+ "agave-syscalls",
+ "base64 0.22.1",
+ "bincode",
+ "crossbeam-channel",
+ "log",
+ "serde_json",
+ "solana-account",
+ "solana-accounts-db",
+ "solana-cli-output",
+ "solana-clock",
+ "solana-cluster-type",
+ "solana-commitment-config",
+ "solana-compute-budget",
+ "solana-core",
+ "solana-epoch-schedule",
+ "solana-feature-gate-interface",
+ "solana-fee-calculator",
+ "solana-genesis-utils",
+ "solana-geyser-plugin-manager",
+ "solana-gossip",
+ "solana-inflation",
+ "solana-instruction",
+ "solana-keypair",
+ "solana-ledger",
+ "solana-loader-v3-interface",
+ "solana-message",
+ "solana-native-token",
+ "solana-net-utils",
+ "solana-program-binaries",
+ "solana-program-runtime",
+ "solana-program-test",
+ "solana-pubkey 4.0.0",
+ "solana-rent 3.0.0",
+ "solana-rpc",
+ "solana-rpc-client",
+ "solana-rpc-client-api",
+ "solana-runtime",
+ "solana-sbpf",
+ "solana-sdk-ids",
+ "solana-signer",
+ "solana-streamer",
+ "solana-tpu-client",
+ "solana-transaction",
+ "solana-validator-exit",
+ "tokio",
 ]
 
 [[package]]
