@@ -276,88 +276,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "agave-validator"
-version = "4.0.0-alpha.0"
-dependencies = [
- "agave-geyser-plugin-interface",
- "agave-logger",
- "agave-snapshots",
- "agave-votor",
- "caps",
- "chrono",
- "clap",
- "console 0.16.2",
- "core_affinity",
- "crossbeam-channel",
- "fd-lock",
- "indicatif 0.18.3",
- "itertools 0.14.0",
- "jsonrpc-core",
- "jsonrpc-core-client",
- "jsonrpc-derive",
- "jsonrpc-ipc-server",
- "libc",
- "libloading",
- "log",
- "num_cpus",
- "qualifier_attr",
- "rand 0.9.2",
- "rayon",
- "serde",
- "serde_json",
- "serde_yaml",
- "solana-account",
- "solana-accounts-db",
- "solana-clap-utils",
- "solana-cli-config",
- "solana-cli-output",
- "solana-clock",
- "solana-commitment-config",
- "solana-core",
- "solana-download-utils",
- "solana-entry",
- "solana-epoch-schedule",
- "solana-faucet",
- "solana-genesis-utils",
- "solana-geyser-plugin-manager",
- "solana-gossip",
- "solana-hash 4.0.1",
- "solana-inflation",
- "solana-keypair",
- "solana-ledger",
- "solana-metrics",
- "solana-native-token",
- "solana-net-utils",
- "solana-perf",
- "solana-poh",
- "solana-program-runtime",
- "solana-pubkey 4.0.0",
- "solana-rayon-threadlimit",
- "solana-rent 3.0.0",
- "solana-rpc",
- "solana-rpc-client",
- "solana-rpc-client-api",
- "solana-runtime",
- "solana-sdk-ids",
- "solana-send-transaction-service",
- "solana-signer",
- "solana-storage-bigtable",
- "solana-streamer",
- "solana-system-interface 3.0.0",
- "solana-test-validator",
- "solana-tpu-client",
- "solana-turbine",
- "solana-unified-scheduler-pool",
- "solana-validator-exit",
- "solana-version",
- "solana-vote-program",
- "symlink",
- "thiserror 2.0.18",
- "tikv-jemallocator",
- "tokio",
-]
-
-[[package]]
 name = "agave-votor"
 version = "4.0.0-alpha.0"
 dependencies = [
@@ -6386,13 +6304,16 @@ dependencies = [
  "solana-compute-budget-program",
  "solana-hash 4.0.1",
  "solana-loader-v4-program",
+ "solana-passive-stake-program",
  "solana-program-runtime",
  "solana-pubkey 4.0.0",
  "solana-sdk-ids",
  "solana-system-program",
+ "solana-treasury-program",
  "solana-vote-program",
  "solana-zk-elgamal-proof-program",
  "solana-zk-token-proof-program",
+ "trv1-developer-rewards-program",
 ]
 
 [[package]]
@@ -7761,6 +7682,32 @@ dependencies = [
 ]
 
 [[package]]
+name = "solana-passive-stake-program"
+version = "4.0.0-alpha.0"
+dependencies = [
+ "bincode",
+ "borsh",
+ "log",
+ "num-derive",
+ "num-traits",
+ "serde",
+ "solana-account",
+ "solana-bincode",
+ "solana-clock",
+ "solana-epoch-schedule",
+ "solana-instruction",
+ "solana-packet 4.0.0",
+ "solana-program-runtime",
+ "solana-pubkey 4.0.0",
+ "solana-rent 3.0.0",
+ "solana-sdk-ids",
+ "solana-svm-log-collector",
+ "solana-svm-type-overrides",
+ "solana-transaction-context",
+ "thiserror 2.0.18",
+]
+
+[[package]]
 name = "solana-perf"
 version = "4.0.0-alpha.0"
 dependencies = [
@@ -8199,9 +8146,9 @@ dependencies = [
 
 [[package]]
 name = "solana-reward-info"
-version = "3.0.0"
+version = "4.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "82be7946105c2ee6be9f9ee7bd18a068b558389221d29efa92b906476102bfcc"
+checksum = "41a0cb91cb3ef9a1c70128f31233cc0f4420c069e8bd22b26d84d9d90d162a0b"
 dependencies = [
  "serde",
  "serde_derive",
@@ -8559,7 +8506,6 @@ dependencies = [
  "agave-logger",
  "agave-reserved-account-keys",
  "agave-syscalls",
- "agave-validator",
  "bincode",
  "borsh",
  "byteorder",
@@ -8624,6 +8570,7 @@ dependencies = [
  "solana-vote-interface",
  "solana-vote-program",
  "test-case",
+ "trv1-validator",
 ]
 
 [[package]]
@@ -9947,59 +9894,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "solana-test-validator"
-version = "4.0.0-alpha.0"
-dependencies = [
- "agave-feature-set",
- "agave-snapshots",
- "agave-syscalls",
- "base64 0.22.1",
- "bincode",
- "crossbeam-channel",
- "log",
- "serde_json",
- "solana-account",
- "solana-accounts-db",
- "solana-cli-output",
- "solana-clock",
- "solana-cluster-type",
- "solana-commitment-config",
- "solana-compute-budget",
- "solana-core",
- "solana-epoch-schedule",
- "solana-feature-gate-interface",
- "solana-fee-calculator",
- "solana-genesis-utils",
- "solana-geyser-plugin-manager",
- "solana-gossip",
- "solana-inflation",
- "solana-instruction",
- "solana-keypair",
- "solana-ledger",
- "solana-loader-v3-interface",
- "solana-message",
- "solana-native-token",
- "solana-net-utils",
- "solana-program-binaries",
- "solana-program-runtime",
- "solana-program-test",
- "solana-pubkey 4.0.0",
- "solana-rent 3.0.0",
- "solana-rpc",
- "solana-rpc-client",
- "solana-rpc-client-api",
- "solana-runtime",
- "solana-sbpf",
- "solana-sdk-ids",
- "solana-signer",
- "solana-streamer",
- "solana-tpu-client",
- "solana-transaction",
- "solana-validator-exit",
- "tokio",
-]
-
-[[package]]
 name = "solana-time-utils"
 version = "3.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -10199,6 +10093,30 @@ dependencies = [
  "solana-transaction",
  "solana-transaction-context",
  "solana-transaction-error",
+ "thiserror 2.0.18",
+]
+
+[[package]]
+name = "solana-treasury-program"
+version = "4.0.0-alpha.0"
+dependencies = [
+ "bincode",
+ "borsh",
+ "log",
+ "num-derive",
+ "num-traits",
+ "serde",
+ "solana-account",
+ "solana-bincode",
+ "solana-clock",
+ "solana-instruction",
+ "solana-packet 4.0.0",
+ "solana-program-runtime",
+ "solana-pubkey 4.0.0",
+ "solana-sdk-ids",
+ "solana-svm-log-collector",
+ "solana-svm-type-overrides",
+ "solana-transaction-context",
  "thiserror 2.0.18",
 ]
 
@@ -11568,6 +11486,167 @@ dependencies = [
  "rusb",
  "thiserror 2.0.18",
  "tracing",
+]
+
+[[package]]
+name = "trv1-developer-rewards-program"
+version = "4.0.0-alpha.0"
+dependencies = [
+ "bincode",
+ "borsh",
+ "log",
+ "num-derive",
+ "num-traits",
+ "serde",
+ "solana-account",
+ "solana-bincode",
+ "solana-clock",
+ "solana-instruction",
+ "solana-native-token",
+ "solana-packet 4.0.0",
+ "solana-program-error",
+ "solana-program-runtime",
+ "solana-pubkey 4.0.0",
+ "solana-sdk-ids",
+ "solana-svm-log-collector",
+ "solana-svm-type-overrides",
+ "solana-transaction-context",
+ "thiserror 2.0.18",
+]
+
+[[package]]
+name = "trv1-test-validator"
+version = "4.0.0-alpha.0"
+dependencies = [
+ "agave-feature-set",
+ "agave-snapshots",
+ "agave-syscalls",
+ "base64 0.22.1",
+ "bincode",
+ "crossbeam-channel",
+ "log",
+ "serde_json",
+ "solana-account",
+ "solana-accounts-db",
+ "solana-cli-output",
+ "solana-clock",
+ "solana-cluster-type",
+ "solana-commitment-config",
+ "solana-compute-budget",
+ "solana-core",
+ "solana-epoch-schedule",
+ "solana-feature-gate-interface",
+ "solana-fee-calculator",
+ "solana-genesis-utils",
+ "solana-geyser-plugin-manager",
+ "solana-gossip",
+ "solana-inflation",
+ "solana-instruction",
+ "solana-keypair",
+ "solana-ledger",
+ "solana-loader-v3-interface",
+ "solana-message",
+ "solana-native-token",
+ "solana-net-utils",
+ "solana-program-binaries",
+ "solana-program-runtime",
+ "solana-program-test",
+ "solana-pubkey 4.0.0",
+ "solana-rent 3.0.0",
+ "solana-rpc",
+ "solana-rpc-client",
+ "solana-rpc-client-api",
+ "solana-runtime",
+ "solana-sbpf",
+ "solana-sdk-ids",
+ "solana-signer",
+ "solana-streamer",
+ "solana-tpu-client",
+ "solana-transaction",
+ "solana-validator-exit",
+ "tokio",
+]
+
+[[package]]
+name = "trv1-validator"
+version = "4.0.0-alpha.0"
+dependencies = [
+ "agave-geyser-plugin-interface",
+ "agave-logger",
+ "agave-snapshots",
+ "agave-votor",
+ "caps",
+ "chrono",
+ "clap",
+ "console 0.16.2",
+ "core_affinity",
+ "crossbeam-channel",
+ "fd-lock",
+ "indicatif 0.18.3",
+ "itertools 0.14.0",
+ "jsonrpc-core",
+ "jsonrpc-core-client",
+ "jsonrpc-derive",
+ "jsonrpc-ipc-server",
+ "libc",
+ "libloading",
+ "log",
+ "num_cpus",
+ "qualifier_attr",
+ "rand 0.9.2",
+ "rayon",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "solana-account",
+ "solana-accounts-db",
+ "solana-clap-utils",
+ "solana-cli-config",
+ "solana-cli-output",
+ "solana-clock",
+ "solana-commitment-config",
+ "solana-core",
+ "solana-download-utils",
+ "solana-entry",
+ "solana-epoch-schedule",
+ "solana-faucet",
+ "solana-genesis-utils",
+ "solana-geyser-plugin-manager",
+ "solana-gossip",
+ "solana-hash 4.0.1",
+ "solana-inflation",
+ "solana-keypair",
+ "solana-ledger",
+ "solana-metrics",
+ "solana-native-token",
+ "solana-net-utils",
+ "solana-perf",
+ "solana-poh",
+ "solana-program-runtime",
+ "solana-pubkey 4.0.0",
+ "solana-rayon-threadlimit",
+ "solana-rent 3.0.0",
+ "solana-rpc",
+ "solana-rpc-client",
+ "solana-rpc-client-api",
+ "solana-runtime",
+ "solana-sdk-ids",
+ "solana-send-transaction-service",
+ "solana-signer",
+ "solana-storage-bigtable",
+ "solana-streamer",
+ "solana-system-interface 3.0.0",
+ "solana-tpu-client",
+ "solana-turbine",
+ "solana-unified-scheduler-pool",
+ "solana-validator-exit",
+ "solana-version",
+ "solana-vote-program",
+ "symlink",
+ "thiserror 2.0.18",
+ "tikv-jemallocator",
+ "tokio",
+ "trv1-test-validator",
 ]
 
 [[package]]
