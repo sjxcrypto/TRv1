@@ -145,10 +145,13 @@ members = [
     "integration-tests",
     "benches/trv1-bench",
     "monitoring",
+    "tests/e2e",
     "tests/stress",
+    "tests/invariants",
 ]
 
 exclude = [
+    "fuzz",
     # solana-dos depends on bench-tps. ignore bench-tps here to avoid confusing cargo's
     # workspace resolution logic, which expects it in the top-level worspace rather than
     # dev-bins

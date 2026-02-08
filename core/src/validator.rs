@@ -1856,6 +1856,68 @@ impl Validator {
             snapshot_controller,
         });
 
+        // -- TRv1 BFT Consensus Initialization --
+        // When the `trv1-bft` feature is enabled, initialize the BFT consensus
+        // service that replaces PoH-based leader scheduling with Tendermint-style
+        // three-phase commit. The PoH services above are still started for
+        // compatibility (they're needed by the TPU/TVU pipeline); the consensus
+        // service runs alongside and will eventually replace the leader schedule.
+        #[cfg(feature = "trv1-bft")]
+        let consensus_service = {
+            use trv1_consensus_bft::{
+                config::BftConfig,
+                validator_set::ValidatorSet as BftValidatorSet,
+            };
+            use solana_signer::Signer;
+
+            info!("TRv1 BFT consensus feature enabled — initializing consensus service");
+
+            // Build a validator set from the current epoch's stake distribution
+            let root_bank = bank_forks.read().unwrap().root_bank();
+            let epoch = root_bank.epoch();
+            let vote_accounts = root_bank.vote_accounts();
+            let validators: Vec<(Pubkey, u64)> = vote_accounts
+                .iter()
+                .map(|(pubkey, (stake, _))| (*pubkey, *stake))
+                .filter(|(_, stake)| *stake > 0)
+                .collect();
+
+            let validator_set = BftValidatorSet::new(validators);
+            info!(
+                "TRv1 BFT: validator set has {} validators (epoch {epoch})",
+                validator_set.len()
+            );
+
+            // Create channels for consensus message routing
+            let (consensus_outbound_sender, _consensus_outbound_receiver) =
+                crossbeam_channel::unbounded();
+            let (_consensus_inbound_sender, consensus_inbound_receiver) =
+                crossbeam_channel::unbounded();
+            // Transaction channel for block production
+            let (_tx_sender, tx_receiver) = crossbeam_channel::unbounded();
+
+            let start_height = root_bank.slot() + 1;
+
+            let service = ConsensusService::new(
+                ConsensusServiceConfig {
+                    bft_config: BftConfig::default(),
+                    block_producer_config: BlockProducerConfig::default(),
+                    start_height,
+                },
+                identity_keypair.clone(),
+                validator_set,
+                bank_forks.clone(),
+                cluster_info.clone(),
+                consensus_inbound_receiver,
+                consensus_outbound_sender,
+                tx_receiver,
+                exit.clone(),
+            );
+
+            info!("TRv1 BFT: consensus service started at height {start_height}");
+            Some(service)
+        };
+
         Ok(Self {
             logfile: config.logfile.clone(),
             exit,
@@ -1890,6 +1952,8 @@ impl Validator {
             repair_quic_endpoints_join_handle,
             xdp_retransmitter,
             _tpu_client_next_runtime: tpu_client_next_runtime,
+            #[cfg(feature = "trv1-bft")]
+            consensus_service,
         })
     }
 
@@ -1981,6 +2045,16 @@ impl Validator {
     pub fn join(self) {
         drop(self.bank_forks);
         drop(self.cluster_info);
+
+        // Join BFT consensus service if present
+        #[cfg(feature = "trv1-bft")]
+        {
+            if let Some(consensus_service) = self.consensus_service {
+                consensus_service
+                    .join()
+                    .expect("trv1 bft consensus_service");
+            }
+        }
 
         self.poh_service.join().expect("poh_service");
         self.block_creation_loop

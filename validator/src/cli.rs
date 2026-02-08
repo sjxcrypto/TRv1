@@ -846,6 +846,52 @@ pub fn test_app<'a>(version: &'a str, default_args: &'a DefaultTestArgs) -> App<
                      silently ignored",
                 ),
         )
+        // ── TRv1 Tiered Storage Options ─────────────────────────────────
+        .arg(
+            Arg::with_name("trv1_hot_cache_size")
+                .long("trv1-hot-cache-size")
+                .value_name("SIZE_GB")
+                .validator(is_parsable::<u64>)
+                .takes_value(true)
+                .default_value("16")
+                .help(
+                    "TRv1: Hot cache size in GB. Controls how much RAM is used for \
+                     the LRU account cache. Larger values improve hit rates but \
+                     require more memory. [default: 16]",
+                ),
+        )
+        .arg(
+            Arg::with_name("trv1_warm_storage_path")
+                .long("trv1-warm-storage-path")
+                .value_name("PATH")
+                .takes_value(true)
+                .help(
+                    "TRv1: Path for warm tier storage. For best performance, this \
+                     should be on an NVMe SSD capable of ~100μs random reads. \
+                     [default: <ledger-dir>/trv1-warm-storage]",
+                ),
+        )
+        .arg(
+            Arg::with_name("trv1_cold_storage_path")
+                .long("trv1-cold-storage-path")
+                .value_name("PATH")
+                .takes_value(true)
+                .help(
+                    "TRv1: Path for cold/archive storage. Can be on slower media \
+                     (HDD) since archived accounts are rarely accessed. \
+                     [default: <ledger-dir>/trv1-cold-storage]",
+                ),
+        )
+        .arg(
+            Arg::with_name("trv1_enable_rent_expiry")
+                .long("trv1-enable-rent-expiry")
+                .takes_value(false)
+                .help(
+                    "TRv1: Enable state rent expiry. When enabled, accounts inactive \
+                     for longer than the cold threshold are archived to cold storage. \
+                     They can be revived by depositing a rent payment.",
+                ),
+        )
         .args(&pub_sub_config::args(/*test_validator:*/ true))
 }
 

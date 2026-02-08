@@ -58,18 +58,11 @@ trv1-developer-rewards-program = { workspace = true }
 solana-hash = { workspace = true }
 solana-pubkey = { workspace = true }
 solana-signature = { workspace = true }
-solana-signer = { workspace = true }
-solana-keypair = { workspace = true }
-solana-transaction = { workspace = true }
-solana-sha256-hasher = { workspace = true }
 
 # Utilities
-borsh = { workspace = true }
 log = { workspace = true }
 env_logger = { workspace = true }
-rand = "0.8"
-serde = { workspace = true }
-serde_json = { workspace = true }
+rand = { workspace = true }
 
 [lints]
 workspace = true

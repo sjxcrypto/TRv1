@@ -216,6 +216,7 @@ pub mod builtins;
 mod check_transactions;
 mod fee_distribution;
 mod metrics;
+#[allow(dead_code)]
 pub(crate) mod trv1_fee_integration;
 pub(crate) mod partitioned_epoch_rewards;
 mod recent_blockhashes_account;
@@ -3891,6 +3892,18 @@ impl Bank {
             measure_us!(self.update_transaction_statuses(sanitized_txs, &processing_results));
 
         self.filter_program_errors_and_collect_fee_details(&processing_results);
+
+        // TRv1: record compute units consumed for EIP-1559 base fee calculation
+        {
+            let total_cu: u64 = processing_results
+                .iter()
+                .filter_map(|r| r.processed_transaction())
+                .map(|tx| tx.executed_units())
+                .sum();
+            if total_cu > 0 {
+                trv1_fee_integration::record_transaction_compute(self, total_cu);
+            }
+        }
 
         timings.saturating_add_in_place(ExecuteTimingType::StoreUs, store_accounts_us);
         timings.saturating_add_in_place(

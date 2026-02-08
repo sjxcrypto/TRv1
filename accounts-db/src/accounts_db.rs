@@ -1154,6 +1154,19 @@ impl AccountsDb {
         &self.bank_hash_details_dir
     }
 
+    /// Set the TRv1 tiered storage adapter.
+    ///
+    /// This enables the TRv1 hot cache layer in front of the accounts
+    /// database. Once set, all loads will check the hot cache first
+    /// and all stores will populate it.
+    #[cfg(feature = "trv1-tiered-storage")]
+    pub fn set_trv1_adapter(
+        &mut self,
+        adapter: crate::trv1_storage_adapter::TRv1StorageAdapter,
+    ) {
+        self.trv1_adapter = Some(adapter);
+    }
+
     /// Returns true if there is an accounts update notifier.
     pub fn has_accounts_update_notifier(&self) -> bool {
         self.accounts_update_notifier.is_some()
@@ -5691,6 +5704,18 @@ impl AccountsDb {
             cache_account_store_stats.num_duplicate_accounts_skipped,
             Ordering::Relaxed,
         );
+
+        // TRv1: Update hot cache on writes so subsequent reads hit the cache
+        #[cfg(feature = "trv1-tiered-storage")]
+        if let Some(ref adapter) = self.trv1_adapter {
+            for index in 0..accounts.len() {
+                let pubkey = accounts.pubkey(index);
+                accounts.account_for_geyser(index, |_pk, account| {
+                    adapter.hot_cache_insert(pubkey, account);
+                });
+            }
+        }
+
         self.report_store_timings();
     }
 

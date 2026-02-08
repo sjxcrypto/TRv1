@@ -198,7 +198,7 @@ mod tests {
     #[test]
     fn test_next_base_fee_decreases_on_low_usage() {
         let config = FeeMarketConfig::default();
-        let mut state = BlockFeeState {
+        let state = BlockFeeState {
             base_fee_per_cu: 10_000,
             parent_gas_used: 12_000_000, // below target
             current_gas_used: 12_000_000,

@@ -1,0 +1,17 @@
+[package]
+name = "trv1-invariant-tests"
+version = "0.0.0"
+publish = false
+edition = "2021"
+
+[dependencies]
+proptest = "1.4"
+trv1-consensus-bft = { path = "../../consensus-bft" }
+trv1-fee-market = { path = "../../fee-market" }
+solana-hash = { workspace = true }
+solana-pubkey = { workspace = true }
+solana-signature = { workspace = true }
+
+[lib]
+name = "trv1_invariant_tests"
+path = "src/lib.rs"
