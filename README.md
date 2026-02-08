@@ -21,21 +21,31 @@ Dramatically reduced hardware requirements compared to Solana's 512GB RAM baseli
 Per-coin annual yield (not fixed inflation). Every staked coin earns 5% per year regardless of total stake, funded by controlled emission with a hard supply cap.
 
 ### ⏱️ Tiered Passive Staking
-Lock-duration tiers with yield multipliers:
-- **Flexible** (no lock): 1.0× base yield
-- **30 days**: 1.2× multiplier
-- **90 days**: 1.5× multiplier
-- **180 days**: 1.8× multiplier
-- **365 days**: 2.0× multiplier
+Lock tokens for longer to earn more yield and governance voting weight:
+
+| Lock Tier | % of Validator Rate | Effective APY | Vote Weight |
+|-----------|-------------------|---------------|-------------|
+| No lock   | 5%                | 0.25%         | 0x (no vote)|
+| 30 day    | 10%               | 0.50%         | 0.10x       |
+| 90 day    | 20%               | 1.00%         | 0.20x       |
+| 180 day   | 30%               | 1.50%         | 0.30x       |
+| 360 day   | 50%               | 2.50%         | 0.50x       |
+| Delegator | 100%              | 5.00%         | 1.00x       |
+| Permanent | 120%              | 6.00%         | 1.50x       |
+
+Early unlock penalties: 5× the tier's reward rate (e.g., 30-day = 2.5% penalty). Permanent lock has no early unlock.
 
 ### 🔥 EIP-1559 Style Fees with 4-Way Split
-Dynamic base fee with surplus distributed:
-| Split | Recipient | Purpose |
-|-------|-----------|---------|
-| 50% | 🔥 Burn | Deflationary pressure |
-| 20% | ✅ Block Validator | Validator incentive |
-| 20% | 🏦 Treasury | Protocol development fund |
-| 10% | 👨‍💻 Developer | Contract deployer rewards |
+Dynamic base fee with a 4-way split that transitions over 5 years:
+
+| Recipient | Launch | Maturity (Year 5) |
+|-----------|--------|-------------------|
+| 🔥 Burn | 10% | 25% |
+| ✅ Validator | 0% | 25% |
+| 🏦 Treasury | 45% | 25% |
+| 👨‍💻 Developer | 45% | 25% |
+
+All percentages governance-adjustable. Transition is linear per epoch.
 
 ### 🏛️ 200 Active Validator Soft Cap
 Active set capped at ~200 validators for performance, with unlimited standby validators ready to rotate in. Promotes decentralization without sacrificing throughput.

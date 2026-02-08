@@ -40,6 +40,10 @@ pub mod tiered_storage;
 pub mod tiered_storage_config;
 pub mod account_cache;
 pub mod state_rent_expiry;
+#[cfg(feature = "trv1-tiered-storage")]
+pub mod trv1_storage_adapter;
+#[cfg(feature = "trv1-tiered-storage")]
+pub mod trv1_maintenance;
 pub mod utils;
 pub mod waitable_condvar;
 

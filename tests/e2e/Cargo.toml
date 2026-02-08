@@ -1,0 +1,75 @@
+[package]
+name = "trv1-e2e-tests"
+description = "End-to-end test scenarios for TRv1 — simulated multi-validator network tests"
+version = { workspace = true }
+authors = { workspace = true }
+repository = { workspace = true }
+homepage = { workspace = true }
+license = { workspace = true }
+edition = { workspace = true }
+publish = false
+
+[lib]
+name = "trv1_e2e_tests"
+path = "src/lib.rs"
+
+[[test]]
+name = "basic_network"
+path = "src/basic_network.rs"
+
+[[test]]
+name = "fee_lifecycle"
+path = "src/fee_lifecycle.rs"
+
+[[test]]
+name = "passive_staking_lifecycle"
+path = "src/passive_staking_lifecycle.rs"
+
+[[test]]
+name = "validator_lifecycle"
+path = "src/validator_lifecycle.rs"
+
+[[test]]
+name = "governance_lifecycle"
+path = "src/governance_lifecycle.rs"
+
+[[test]]
+name = "treasury_lifecycle"
+path = "src/treasury_lifecycle.rs"
+
+[[test]]
+name = "network_stress"
+path = "src/network_stress.rs"
+
+[dependencies]
+# Consensus engine
+trv1-consensus-bft = { path = "../../consensus-bft" }
+
+# Fee market
+trv1-fee-market = { path = "../../fee-market" }
+
+# TRv1 programs (built-in)
+solana-passive-stake-program = { workspace = true }
+solana-treasury-program = { workspace = true }
+trv1-governance-program = { workspace = true }
+trv1-developer-rewards-program = { workspace = true }
+
+# Solana core crates
+solana-hash = { workspace = true }
+solana-pubkey = { workspace = true }
+solana-signature = { workspace = true }
+solana-signer = { workspace = true }
+solana-keypair = { workspace = true }
+solana-transaction = { workspace = true }
+solana-sha256-hasher = { workspace = true }
+
+# Utilities
+borsh = { workspace = true }
+log = { workspace = true }
+env_logger = { workspace = true }
+rand = "0.8"
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+[lints]
+workspace = true

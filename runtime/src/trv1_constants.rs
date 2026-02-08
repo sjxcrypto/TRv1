@@ -58,6 +58,22 @@ pub const SLASH_REPEAT_PCT: f64 = 0.25;
 /// Hours a validator is jailed for being offline.
 pub const JAIL_OFFLINE_HOURS: u64 = 24;
 
+// === EIP-1559 Fee Market Genesis Defaults ===
+/// Starting base fee per compute unit in lamports at genesis.
+pub const INITIAL_BASE_FEE: u64 = 5_000;
+
+/// Maximum base fee per compute unit in lamports.
+pub const MAX_BASE_FEE: u64 = 50_000_000;
+
+/// Maximum block compute units.
+pub const MAX_BLOCK_COMPUTE_UNITS: u64 = 48_000_000;
+
+/// Target block utilization percentage (0-100).
+pub const TARGET_UTILIZATION_PCT: u8 = 50;
+
+/// Base fee change denominator (±1/N max change per block, 8 = ±12.5%).
+pub const BASE_FEE_CHANGE_DENOMINATOR: u64 = 8;
+
 /// Treasury account pubkey placeholder (to be set at genesis).
 /// This is a default placeholder; the real treasury pubkey should be
 /// configured in the genesis config.

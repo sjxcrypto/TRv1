@@ -12,14 +12,20 @@ pub mod admin_rpc_post_init;
 pub mod banking_simulation;
 pub mod banking_stage;
 pub mod banking_trace;
+#[cfg(feature = "trv1-bft")]
+pub mod bft_adapter;
 #[allow(dead_code)]
 mod block_creation_loop;
+#[cfg(feature = "trv1-bft")]
+pub mod block_producer;
 mod bls_sigverifier;
 pub mod cluster_info_vote_listener;
 pub mod cluster_slots_service;
 pub mod commitment_service;
 pub mod completed_data_sets_service;
 pub mod consensus;
+#[cfg(feature = "trv1-bft")]
+pub mod consensus_service;
 pub mod cost_update_service;
 pub mod drop_bank_service;
 pub mod fetch_stage;

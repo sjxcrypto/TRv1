@@ -1,6 +1,12 @@
 //! The `validator` module hosts all the validator microservices.
 
 pub use solana_perf::report_target_features;
+#[cfg(feature = "trv1-bft")]
+use crate::{
+    bft_adapter::BftAdapter,
+    block_producer::{BlockProducer, BlockProducerConfig},
+    consensus_service::{ConsensusService, ConsensusServiceConfig},
+};
 use {
     crate::{
         admin_rpc_post_init::{AdminRpcRequestMetadataPostInit, KeyUpdaterType, KeyUpdaters},
@@ -692,6 +698,9 @@ pub struct Validator {
     // We don't wait for its JoinHandle here because ownership and shutdown
     // are managed elsewhere. This variable is intentionally unused.
     _tpu_client_next_runtime: Option<TokioRuntime>,
+    /// BFT consensus service (only present when `trv1-bft` feature is enabled).
+    #[cfg(feature = "trv1-bft")]
+    consensus_service: Option<ConsensusService>,
 }
 
 impl Validator {

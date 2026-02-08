@@ -982,6 +982,12 @@ pub struct AccountsDb {
     /// This feature tracks obsolete accounts in the account storage entry allowing
     /// for earlier cleaning of obsolete accounts in the storages and index.
     pub mark_obsolete_accounts: MarkObsoleteAccounts,
+
+    /// TRv1 tiered storage adapter.
+    /// When enabled, provides a hot LRU cache layer in front of the accounts
+    /// database, reducing RAM requirements from ~512GB to ~32GB.
+    #[cfg(feature = "trv1-tiered-storage")]
+    pub trv1_adapter: Option<crate::trv1_storage_adapter::TRv1StorageAdapter>,
 }
 
 pub fn quarter_thread_count() -> usize {
@@ -1132,6 +1138,8 @@ impl AccountsDb {
             latest_full_snapshot_slot: SeqLock::new(None),
             best_ancient_slots_to_shrink: RwLock::default(),
             mark_obsolete_accounts: accounts_db_config.mark_obsolete_accounts,
+            #[cfg(feature = "trv1-tiered-storage")]
+            trv1_adapter: None,
         };
 
         {
@@ -3912,14 +3920,40 @@ impl AccountsDb {
         load_hint: LoadHint,
         load_zero_lamports: LoadZeroLamports,
     ) -> Option<(AccountSharedData, Slot)> {
-        self.do_load_with_populate_read_cache(
+        // TRv1: Check hot cache before hitting storage
+        #[cfg(feature = "trv1-tiered-storage")]
+        if let Some(ref adapter) = self.trv1_adapter {
+            if let Some(account) = adapter.hot_cache_get(pubkey) {
+                if load_zero_lamports == LoadZeroLamports::None && account.is_zero_lamport() {
+                    return None;
+                }
+                // We don't know the exact slot from the hot cache, but we
+                // can use the max root as a reasonable estimate for the
+                // caller. The hot cache is a performance optimization —
+                // the canonical slot comes from the accounts index.
+                let slot = max_root.unwrap_or(0);
+                return Some((account, slot));
+            }
+        }
+
+        let result = self.do_load_with_populate_read_cache(
             ancestors,
             pubkey,
             max_root,
             load_hint,
             false,
             load_zero_lamports,
-        )
+        );
+
+        // TRv1: Populate hot cache on storage hit
+        #[cfg(feature = "trv1-tiered-storage")]
+        if let Some((ref account, _slot)) = result {
+            if let Some(ref adapter) = self.trv1_adapter {
+                adapter.hot_cache_insert(pubkey, account);
+            }
+        }
+
+        result
     }
 
     /// Load account with `pubkey` and maybe put into read cache.

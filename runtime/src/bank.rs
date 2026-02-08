@@ -216,6 +216,7 @@ pub mod builtins;
 mod check_transactions;
 mod fee_distribution;
 mod metrics;
+pub(crate) mod trv1_fee_integration;
 pub(crate) mod partitioned_epoch_rewards;
 mod recent_blockhashes_account;
 mod serde_snapshot;
@@ -588,6 +589,8 @@ impl PartialEq for Bank {
             bank_hash_stats: _,
             epoch_rewards_calculation_cache: _,
             trv1_slashing: _,
+            trv1_fee_state: _,
+            trv1_fee_config: _,
             // Ignore new fields explicitly if they do not impact PartialEq.
             // Adding ".." will remove compile-time checks that if a new field
             // is added to the struct, this PartialEq is accordingly updated.
@@ -938,6 +941,14 @@ pub struct Bank {
 
     /// TRv1: Slashing and jailing state for validators.
     trv1_slashing: Arc<RwLock<crate::slashing::SlashingState>>,
+
+    /// TRv1: EIP-1559 dynamic fee market state for the current block.
+    /// Tracks the base fee per compute unit and cumulative gas usage.
+    pub trv1_fee_state: RwLock<trv1_fee_market::BlockFeeState>,
+
+    /// TRv1: Fee market configuration. Stored per-bank for future
+    /// governance-driven config updates.
+    pub trv1_fee_config: trv1_fee_market::FeeMarketConfig,
 }
 
 #[derive(Debug)]
@@ -1147,6 +1158,10 @@ impl Bank {
             bank_hash_stats: AtomicBankHashStats::default(),
             epoch_rewards_calculation_cache: Arc::new(Mutex::new(HashMap::default())),
             trv1_slashing: Arc::new(RwLock::new(crate::slashing::SlashingState::new())),
+            trv1_fee_state: RwLock::new(trv1_fee_market::BlockFeeState::genesis(
+                trv1_fee_market::FeeMarketConfig::default().min_base_fee,
+            )),
+            trv1_fee_config: trv1_fee_market::FeeMarketConfig::default(),
         };
 
         bank.transaction_processor =
@@ -1395,7 +1410,15 @@ impl Bank {
             bank_hash_stats: AtomicBankHashStats::default(),
             epoch_rewards_calculation_cache: parent.epoch_rewards_calculation_cache.clone(),
             trv1_slashing: parent.trv1_slashing.clone(),
+            // TRv1: fee state is initialized as a placeholder; updated below.
+            trv1_fee_state: RwLock::new(trv1_fee_market::BlockFeeState::genesis(
+                trv1_fee_market::FeeMarketConfig::default().min_base_fee,
+            )),
+            trv1_fee_config: parent.trv1_fee_config.clone(),
         };
+
+        // TRv1: compute next base fee from parent's utilization
+        trv1_fee_integration::update_base_fee_for_new_block(&new, &parent);
 
         let (_, ancestors_time_us) = measure_us!({
             let mut ancestors = Vec::with_capacity(1 + new.parents().len());
@@ -1970,6 +1993,12 @@ impl Bank {
             bank_hash_stats: AtomicBankHashStats::new(&fields.bank_hash_stats),
             epoch_rewards_calculation_cache: Arc::new(Mutex::new(HashMap::default())),
             trv1_slashing: Arc::new(RwLock::new(crate::slashing::SlashingState::new())),
+            // TRv1: restore fee state from snapshot defaults (the actual state
+            // will be recomputed from parent when this bank is used as a parent).
+            trv1_fee_state: RwLock::new(trv1_fee_market::BlockFeeState::genesis(
+                trv1_fee_market::FeeMarketConfig::default().min_base_fee,
+            )),
+            trv1_fee_config: trv1_fee_market::FeeMarketConfig::default(),
         };
 
         // Sanity assertions between bank snapshot and genesis config
@@ -2075,6 +2104,21 @@ impl Bank {
     /// TRv1: mutable access to slashing/jailing state.
     pub fn trv1_slashing_state_mut(&self) -> std::sync::RwLockWriteGuard<'_, crate::slashing::SlashingState> {
         self.trv1_slashing.write().unwrap()
+    }
+
+    /// TRv1: get the current EIP-1559 base fee per compute unit.
+    pub fn trv1_base_fee_per_cu(&self) -> u64 {
+        self.trv1_fee_state.read().unwrap().base_fee_per_cu
+    }
+
+    /// TRv1: get a copy of the current block fee state.
+    pub fn trv1_block_fee_state(&self) -> trv1_fee_market::BlockFeeState {
+        *self.trv1_fee_state.read().unwrap()
+    }
+
+    /// TRv1: get a reference to the fee market configuration.
+    pub fn trv1_fee_config(&self) -> &trv1_fee_market::FeeMarketConfig {
+        &self.trv1_fee_config
     }
 
     pub fn genesis_creation_time(&self) -> UnixTimestamp {
@@ -2624,6 +2668,8 @@ impl Bank {
         if *hash == Hash::default() {
             // finish up any deferred changes to account state
             self.distribute_transaction_fee_details();
+            // TRv1: finalize EIP-1559 fee state for this block
+            trv1_fee_integration::finalize_block_fees(self);
             self.update_slot_history();
             self.run_incinerator();
 
