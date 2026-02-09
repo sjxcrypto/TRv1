@@ -102,7 +102,7 @@ jobs:
           shasum -a 256 ${{ matrix.archive }}.tar.gz > ${{ matrix.archive }}.sha256
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ matrix.archive }}
           path: |
