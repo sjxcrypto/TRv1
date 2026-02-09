@@ -9,7 +9,7 @@ on:
       version:
         description: 'Release version (e.g., v0.1.0)'
         required: true
-        default: 'v0.1.0'
+        default: 'v0.1.1'
 
 env:
   CARGO_TERM_COLOR: always
@@ -27,10 +27,6 @@ jobs:
             target: x86_64-unknown-linux-gnu
             binary: trv1-validator
             archive: trv1-validator-linux-x86_64
-          - os: macos-13
-            target: x86_64-apple-darwin
-            binary: trv1-validator
-            archive: trv1-validator-macos-x86_64
           - os: macos-latest
             target: aarch64-apple-darwin
             binary: trv1-validator
@@ -118,6 +114,13 @@ jobs:
             echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
           fi
 
+      - name: Prepare release files
+        run: |
+          mkdir -p release-files
+          find artifacts -name "*.tar.gz" -exec cp {} release-files/ \;
+          find artifacts -name "*.sha256" -exec cp {} release-files/ \;
+          ls -la release-files/
+
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
@@ -131,8 +134,7 @@ jobs:
             | Platform | Architecture | Download |
             |----------|--------------|----------|
             | Linux | x86_64 | `trv1-validator-linux-x86_64.tar.gz` |
-            | macOS | Intel (x86_64) | `trv1-validator-macos-x86_64.tar.gz` |
-            | macOS | Apple Silicon (M1/M2/M3) | `trv1-validator-macos-aarch64.tar.gz` |
+            | macOS | Apple Silicon (M1/M2/M3/M4) | `trv1-validator-macos-aarch64.tar.gz` |
             
             ### Features
             - Tendermint-style BFT consensus
@@ -161,8 +163,7 @@ jobs:
             ```bash
             shasum -a 256 -c trv1-validator-*.sha256
             ```
-          files: |
-            artifacts/**/*
+          files: release-files/*
           draft: false
           prerelease: false
         env:
